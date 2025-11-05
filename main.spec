@@ -1,0 +1,112 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+EXCLUDE_DLLS = [
+    "VCRUNTIME140.dll",
+    "VCRUNTIME140_1.dll",
+    "ucrtbase.dll",
+    "MSVCP140.dll",
+]
+EXCLUDE_DLL_PREFIX = ("api-ms-win-crt-", "api-ms-win-core-")
+
+
+def _fix_binaries(binaries):
+    return [
+        binary
+        for binary in binaries
+        if not binary[0] in EXCLUDE_DLLS
+        and not binary[0].startswith(EXCLUDE_DLL_PREFIX)
+    ]
+
+
+a = Analysis(
+    ["src/main.py"],
+    pathex=["."],
+    datas=[],
+    hiddenimports=[],
+    hookspath=[],
+    binaries=[
+        ("./lib/InjectionLib.dll", "."),
+        ("./assets/icon.ico", "."),
+    ],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[
+        "email",
+        "random",
+        "logging",
+        "urllib",
+        "socket",
+        "base64",
+        "selectors",
+        "textwrap",
+        "tarfile",
+        "argparse",
+        "py_compile",
+        "calendar",
+        "copy",
+        "csv",
+        "dataclasses",
+        "bz2",
+        "gettext",
+        "getopt",
+        "pickle",
+        "lzma",
+        "quopri",
+        "string",
+        "stringprep",
+        "tracemalloc",
+        "inspect",
+        "ast",
+        "token",
+        "tokenize",
+        "unicodedata",
+        "_socket",
+        "_colorize",
+        "_py_abc",
+        "_strptime",
+        # Base Libraires
+        "abc",
+        "codecs",
+        "genericpath",
+        "heapq",
+        "io",
+        "linecache",
+        "ntpath",
+        "posixpath",
+        "traceback",
+        "_collections_abc",
+        "stat",
+        "sre_compile",
+        "sre_constants",
+        "sre_parse",
+    ],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    noarchive=False,
+    optimize=2,
+)
+
+a.binaries = _fix_binaries(a.binaries)
+
+pyz = PYZ(a.pure, a.zipped_data)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    [],
+    name="Minecraft DLL 注入工具",
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,
+    icon="assets/icon.ico",
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
