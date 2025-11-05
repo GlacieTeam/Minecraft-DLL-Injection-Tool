@@ -1,0 +1,36 @@
+on:
+  push:
+    paths:
+      - .github/workflows/build.yml
+      - src/**
+      - build.spec
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on Windows (X86_64)
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Build MinecraftInjector
+        run: |
+          $url = "https://github.com/upx/upx/releases/download/v5.0.2/upx-5.0.2-win64.zip"
+          Invoke-WebRequest -Uri $url -OutFile upx.zip
+          Expand-Archive -Path upx.zip -DestinationPath upx
+          pip install pyinstaller
+          pyinstaller main.spec --upx-dir=upx/upx-5.0.2-win64 --distpath=bin
+          Get-ChildItem -Path "bin" -File | Compress-Archive -DestinationPath "bin/MinecraftInjector-windows-x86_64.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MinecraftInjector-windows-x86_64-${{ github.sha }}
+          path: bin/MinecraftInjector-windows-x86_64.zip
