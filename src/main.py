@@ -51,7 +51,7 @@ class MainWindow(tk.Tk):
     def on_inject(self):
         dll = self.dll_path.get().strip()
         if not dll:
-            messagebox.showwarning("输入错误", "请先需要注入的 DLL 文件")
+            messagebox.showerror("错误", "请先选择需要注入的 DLL 文件")
             return
 
         proc = injector.get_process_id("Minecraft.Windows.exe")
@@ -59,15 +59,9 @@ class MainWindow(tk.Tk):
             proc = try_launch_minecraft()
 
         if proc == 0:
-            raise RuntimeError("无法启动 Minecraft!")
+            messagebox.showerror("错误", "无法启动 Minecraft！")
 
-        try:
-            ok = injector.inject_dll(proc, dll)
-        except Exception as e:
-            messagebox.showerror("异常", f"注入过程发生异常：\n{e}")
-            return
-
-        if ok:
+        if injector.inject_dll(proc, dll):
             messagebox.showinfo("成功", "DLL 注入成功！")
         else:
             messagebox.showerror("失败", "DLL 注入失败！")
