@@ -3,7 +3,8 @@ on:
     paths:
       - .github/workflows/build.yml
       - src/**
-      - build.spec
+      - main.spec
+      - Version.txt
   pull_request:
   workflow_dispatch:
 
