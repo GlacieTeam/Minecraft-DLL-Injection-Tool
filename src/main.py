@@ -30,6 +30,13 @@ class MainWindow(tk.Tk):
 
         pad = {"padx": 5, "pady": 5, "sticky": "ew"}
 
+        tk.Label(
+            self,
+            text="Minecraft DLL 注入工具",
+            fg="black",
+            font=("Microsoft YaHei", 18, "bold"),
+        ).grid(row=0, column=0, columnspan=3, pady=(10, 15))
+
         ttk.Label(self, text="请选择需要注入的 DLL 文件：").grid(row=1, column=0, **pad)
         ttk.Entry(self, textvariable=self.dll_path, state="readonly", width=30).grid(
             row=1, column=1, **pad
