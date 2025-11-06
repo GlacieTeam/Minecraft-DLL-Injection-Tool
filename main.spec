@@ -1,5 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_dynamic_libs
 
+# 排除系统 DLL, 正常都有的
 EXCLUDE_DLLS = [
     "VCRUNTIME140.dll",
     "VCRUNTIME140_1.dll",
@@ -8,7 +10,12 @@ EXCLUDE_DLLS = [
 ]
 EXCLUDE_DLL_PREFIX = ("api-ms-win-crt-", "api-ms-win-core-")
 
+# 打包 win64_process_toolkit 运行时
+BINARIES = collect_dynamic_libs("win64_process_toolkit")
+BINARIES.append(("./assets/icon.ico", "."))
 
+
+# 修复自动打包的 DLL 问题
 def _fix_binaries(binaries):
     return [
         binary
@@ -24,10 +31,7 @@ a = Analysis(
     datas=[],
     hiddenimports=[],
     hookspath=[],
-    binaries=[
-        ("./lib/InjectionLib.dll", "."),
-        ("./assets/icon.ico", "."),
-    ],
+    binaries=BINARIES,
     hooksconfig={},
     runtime_hooks=[],
     excludes=[

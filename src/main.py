@@ -3,7 +3,7 @@ import sys
 import webbrowser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-import injector
+import win64_process_toolkit as injector
 
 
 def try_launch_minecraft() -> int:
@@ -38,12 +38,12 @@ class MainWindow(tk.Tk):
             row=1, column=2, **pad
         )
 
-        ttk.Button(self, text="注入", command=self.on_inject).grid(
+        ttk.Button(self, text="注入 DLL", command=self.on_inject).grid(
             row=2, column=0, columnspan=3, pady=10
         )
 
     def browse_dll(self):
-        filetypes = [("请选择需要注入的 DLL 文件", "*.dll"), ("所有文件", "*.*")]
+        filetypes = [("DLL 文件", "*.dll"), ("所有文件", "*.*")]
         path = filedialog.askopenfilename(title="选择要注入的 DLL", filetypes=filetypes)
         if path:
             self.dll_path.set(os.path.normpath(path))
