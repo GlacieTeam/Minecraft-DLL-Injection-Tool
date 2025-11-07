@@ -1,0 +1,15 @@
+{
+    "Minecraft DLL Injection Tool": "Minecraft DLL Injection Tool",
+    "Please select the DLL file to inject:": "Please select the DLL file to inject:",
+    "Browse...": "Browse...",
+    "Inject DLL": "Inject DLL",
+    "DLL File": "DLL File",
+    "All Files": "All Files",
+    "Select File": "Select File",
+    "ERROR": "ERROR",
+    "Success": "Success",
+    "Failed to launch Minecraft!": "Failed to launch Minecraft!",
+    "DLL successfully injected!": "DLL successfully injected!",
+    "DLL injection failed!": "DLL injection failed!",
+    "Please select the DLL file to inject first!": "Please select the DLL file to inject first!"
+}

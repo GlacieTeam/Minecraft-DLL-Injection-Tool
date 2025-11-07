@@ -15,11 +15,11 @@ VSVersionInfo(
       StringTable(
         u'040904b0',
         [StringStruct(u'CompanyName',      u'GlacieTeam'),
-         StringStruct(u'FileDescription',  u'Minecraft DLL 注入工具'),
+         StringStruct(u'FileDescription',  u'Minecraft DLL Injection Tool'),
          StringStruct(u'FileVersion',      u'1.0.0'),
          StringStruct(u'ProductVersion',   u'1.0.0'),
-         StringStruct(u'ProductName',      u'Minecraft DLL 注入工具'),
-         StringStruct(u'LegalCopyright',   u'© 2025 GlacieTeam. All rights reserved.')])
+         StringStruct(u'ProductName',      u'Minecraft DLL Injection Tool'),
+         StringStruct(u'LegalCopyright',   u'Copyright © 2025 GlacieTeam. All rights reserved.')])
       ]),
     VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
   ]

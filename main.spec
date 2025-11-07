@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_dynamic_libs
+from PyInstaller.building.datastruct import Tree
 
 # 排除系统 DLL, 正常都有的
 EXCLUDE_DLLS = [
@@ -11,11 +12,16 @@ EXCLUDE_DLLS = [
 EXCLUDE_DLL_PREFIX = ("api-ms-win-crt-", "api-ms-win-core-")
 
 # 打包 win64_process_toolkit 运行时
-BINARIES = collect_dynamic_libs("win64_process_toolkit")
-BINARIES.append(("./assets/icon.ico", "."))
+BINARIES = [
+    ("./assets/icon.ico", "."),
+    ("./lang/*", "lang"),
+]
+BINARIES += collect_dynamic_libs("win64_process_toolkit")
+
+DATAS = Tree("lang")
 
 
-# 修复自动打包的 DLL 问题
+# 修复默认打包大量无用 DLL 的问题
 def _fix_binaries(binaries):
     return [
         binary
@@ -101,7 +107,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name="Minecraft DLL 注入工具",
+    name="Minecraft DLL Injection Tool",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -113,5 +119,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    version="Version.txt"
+    version="Version.txt",
 )

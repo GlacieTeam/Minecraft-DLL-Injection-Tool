@@ -1,0 +1,15 @@
+{
+    "Minecraft DLL Injection Tool": "Minecraft DLL 注入工具",
+    "Please select the DLL file to inject:": "请选择需要注入的 DLL 文件：",
+    "Browse...": "浏览...",
+    "Inject DLL": "注入 DLL",
+    "DLL File": "DLL 文件",
+    "All Files": "所有文件",
+    "Select File": "选择文件",
+    "ERROR": "错误",
+    "Success": "成功",
+    "Failed to launch Minecraft!": "无法启动 Minecraft！",
+    "DLL successfully injected!": "DLL 注入成功！",
+    "DLL injection failed!": "DLL 注入失败！",
+    "Please select the DLL file to inject first!": "请先选择需要注入的 DLL 文件！"
+}

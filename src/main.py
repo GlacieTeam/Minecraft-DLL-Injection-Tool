@@ -4,6 +4,7 @@ import webbrowser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import win64_process_toolkit as injector
+import i18n
 
 
 def try_launch_minecraft() -> int:
@@ -14,7 +15,6 @@ def try_launch_minecraft() -> int:
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Minecraft DLL 注入工具")
         self.resizable(False, False)
         if getattr(sys, "frozen", False):
             icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon.ico")
@@ -25,40 +25,71 @@ class MainWindow(tk.Tk):
             )
         self.iconbitmap(icon)
 
+        self.language = tk.StringVar(value="English")
         self.process_name = tk.StringVar()
         self.dll_path = tk.StringVar()
 
-        pad = {"padx": 5, "pady": 5, "sticky": "ew"}
+        pad = {
+            "padx": 5,
+            "pady": 5,
+            "sticky": "ew",
+        }
 
-        tk.Label(
+        self.ui_title = tk.Label(
             self,
-            text="Minecraft DLL 注入工具",
             fg="black",
             font=("Microsoft YaHei", 18, "bold"),
-        ).grid(row=0, column=0, columnspan=3, pady=(10, 15))
+        )
+        self.ui_title.grid(row=0, column=0, columnspan=3, pady=(10, 15))
 
-        ttk.Label(self, text="请选择需要注入的 DLL 文件：").grid(row=1, column=0, **pad)
-        ttk.Entry(self, textvariable=self.dll_path, state="readonly", width=30).grid(
-            row=1, column=1, **pad
+        lang_cb = ttk.Combobox(
+            self,
+            textvariable=self.language,
+            values=("English", "简体中文"),
+            state="readonly",
+            width=9,
         )
-        ttk.Button(self, text="浏览…", command=self.browse_dll).grid(
-            row=1, column=2, **pad
-        )
+        lang_cb.grid(row=0, column=2, sticky="ne", padx=6, pady=4)
+        lang_cb.bind("<<ComboboxSelected>>", self.on_lang_change)
 
-        ttk.Button(self, text="注入 DLL", command=self.on_inject).grid(
-            row=2, column=0, columnspan=3, pady=10
+        self.columnconfigure(1, weight=1)
+
+        self.dll_lable = ttk.Label(self)
+        self.dll_lable.grid(row=1, column=0, **pad)
+
+        self.dll_entry = ttk.Entry(
+            self, textvariable=self.dll_path, state="readonly", width=32
         )
+        self.dll_entry.grid(row=1, column=1, **pad)
+
+        self.dll_button = ttk.Button(self, command=self.browse_dll)
+        self.dll_button.grid(row=1, column=2, **pad)
+
+        ttk.Style().configure(
+            "Big.TButton", font=("Microsoft YaHei", 12, "bold"), padding=(10, 5)
+        )
+        self.inject_button = ttk.Button(
+            self, command=self.on_inject, style="Big.TButton"
+        )
+        self.inject_button.grid(row=2, column=0, columnspan=3, pady=10)
+
+        self.on_lang_change()
 
     def browse_dll(self):
-        filetypes = [("DLL 文件", "*.dll"), ("所有文件", "*.*")]
-        path = filedialog.askopenfilename(title="选择要注入的 DLL", filetypes=filetypes)
+        filetypes = [(i18n.get("DLL File"), "*.dll"), (i18n.get("All Files"), "*.*")]
+        path = filedialog.askopenfilename(
+            title=i18n.get("Select File"), filetypes=filetypes
+        )
         if path:
             self.dll_path.set(os.path.normpath(path))
 
     def on_inject(self):
         dll = self.dll_path.get().strip()
         if not dll:
-            messagebox.showerror("错误", "请先选择需要注入的 DLL 文件")
+            messagebox.showerror(
+                i18n.get("ERROR"),
+                i18n.get("Please select the DLL file to inject first!"),
+            )
             return
 
         proc = injector.get_process_id("Minecraft.Windows.exe")
@@ -66,12 +97,24 @@ class MainWindow(tk.Tk):
             proc = try_launch_minecraft()
 
         if proc == 0:
-            messagebox.showerror("错误", "无法启动 Minecraft！")
+            messagebox.showerror(
+                i18n.get("ERROR"), i18n.get("Failed to launch Minecraft!")
+            )
 
         if injector.inject_dll(proc, dll):
-            messagebox.showinfo("成功", "DLL 注入成功！")
+            messagebox.showinfo(
+                i18n.get("Success"), i18n.get("DLL successfully injected!")
+            )
         else:
-            messagebox.showerror("失败", "DLL 注入失败！")
+            messagebox.showerror(i18n.get("ERROR"), i18n.get("DLL injection failed!"))
+
+    def on_lang_change(self, _=None):
+        i18n.choose_language(i18n.get_code(self.language.get()))
+        self.title(i18n.get("Minecraft DLL Injection Tool"))
+        self.ui_title.config(text=i18n.get("Minecraft DLL Injection Tool"))
+        self.dll_lable.config(text=i18n.get("Please select the DLL file to inject:"))
+        self.dll_button.config(text=i18n.get("Browse..."))
+        self.inject_button.config(text=i18n.get("Inject DLL"))
 
 
 if __name__ == "__main__":
