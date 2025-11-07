@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_dynamic_libs
-from PyInstaller.building.datastruct import Tree
 
 # 排除系统 DLL, 正常都有的
 EXCLUDE_DLLS = [
@@ -17,8 +16,6 @@ BINARIES = [
     ("./lang/*", "lang"),
 ]
 BINARIES += collect_dynamic_libs("win64_process_toolkit")
-
-DATAS = Tree("lang")
 
 
 # 修复默认打包大量无用 DLL 的问题
