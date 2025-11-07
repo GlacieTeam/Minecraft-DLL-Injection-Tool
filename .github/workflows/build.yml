@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Build MinecraftInjector
+      - name: Build Minecraft-DLL-Injection-Tool
         run: |
           $url = "https://github.com/upx/upx/releases/download/v5.0.2/upx-5.0.2-win64.zip"
           Invoke-WebRequest -Uri $url -OutFile upx.zip
@@ -30,9 +30,9 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
           pyinstaller main.spec --upx-dir=upx/upx-5.0.2-win64 --distpath=bin
-          Get-ChildItem -Path "bin" -File | Compress-Archive -DestinationPath "bin/MinecraftInjector-windows-x86_64.zip"
+          Get-ChildItem -Path "bin" -File | Compress-Archive -DestinationPath "bin/Minecraft-DLL-Injection-Tool-windows-x86_64.zip"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: MinecraftInjector-windows-x86_64-${{ github.sha }}
-          path: bin/MinecraftInjector-windows-x86_64.zip
+          name: Minecraft-DLL-Injection-Tool-windows-x86_64-${{ github.sha }}
+          path: bin/Minecraft-DLL-Injection-Tool-windows-x86_64.zip
