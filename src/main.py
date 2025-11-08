@@ -17,7 +17,9 @@ class MainWindow(tk.Tk):
         super().__init__()
         self.resizable(False, False)
         if getattr(sys, "frozen", False):
-            icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon.ico")
+            icon = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "assets/icon.ico"
+            )
         else:
             icon = os.path.join(
                 os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -25,8 +27,7 @@ class MainWindow(tk.Tk):
             )
         self.iconbitmap(icon)
 
-        self.language = tk.StringVar(value="English")
-        self.process_name = tk.StringVar()
+        self.language = tk.StringVar(value=i18n.lang_name(i18n.system_lang_code()))
         self.dll_path = tk.StringVar()
 
         pad = {
@@ -45,7 +46,7 @@ class MainWindow(tk.Tk):
         lang_cb = ttk.Combobox(
             self,
             textvariable=self.language,
-            values=("English", "简体中文"),
+            values=i18n.lang_names(),
             state="readonly",
             width=9,
         )
@@ -81,10 +82,10 @@ class MainWindow(tk.Tk):
             title=i18n.get("Select File"), filetypes=filetypes
         )
         if path:
-            self.dll_path.set(os.path.normpath(path))
+            self.dll_path.set(os.path.normpath(path).strip())
 
     def on_inject(self):
-        dll = self.dll_path.get().strip()
+        dll = self.dll_path.get()
         if not dll:
             messagebox.showerror(
                 i18n.get("ERROR"),
@@ -109,7 +110,7 @@ class MainWindow(tk.Tk):
             messagebox.showerror(i18n.get("ERROR"), i18n.get("DLL injection failed!"))
 
     def on_lang_change(self, _=None):
-        i18n.choose_language(i18n.get_code(self.language.get()))
+        i18n.choose_language(i18n.lang_code(self.language.get()))
         self.title(i18n.get("Minecraft DLL Injection Tool"))
         self.ui_title.config(text=i18n.get("Minecraft DLL Injection Tool"))
         self.dll_lable.config(text=i18n.get("Please select the DLL file to inject:"))

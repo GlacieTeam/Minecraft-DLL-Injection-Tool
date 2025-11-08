@@ -12,8 +12,8 @@ EXCLUDE_DLL_PREFIX = ("api-ms-win-crt-", "api-ms-win-core-")
 
 # 打包 win64_process_toolkit 运行时
 BINARIES = [
-    ("./assets/icon.ico", "."),
-    ("./lang/*", "lang"),
+    ("./assets/icon.ico", "assets"),
+    ("./assets/lang/*", "assets/lang"),
 ]
 BINARIES += collect_dynamic_libs("win64_process_toolkit")
 
